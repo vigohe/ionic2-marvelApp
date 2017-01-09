@@ -1,0 +1,39 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-title>Marvel Comics</ion-title>
+    <ion-list>
+      <ion-searchbar (ionInput)="getItems($event)"></ion-searchbar>
+
+      <ion-item>
+        <ion-label>Year</ion-label>
+        <ion-select [(ngModel)]="gaming">
+          <ion-option value="1900">1900</ion-option>
+        </ion-select>
+      </ion-item>
+    </ion-list>
+
+  </ion-navbar>
+</ion-header>
+
+
+
+<ion-content padding>
+
+  <ion-card  *ngFor="let comic of comics" >
+    <ion-item>
+      <img src="{{comic.thumbnail.path}}.{{comic.thumbnail.extension}}"/>
+    </ion-item>
+    <ion-card-content>
+      <ion-card-title>
+        {{ comic.title }}
+      </ion-card-title>
+      <p>{{comic?.textObjects[0]?.text}}</p>
+    </ion-card-content>
+  </ion-card>
+
+
+  <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
+</ion-content>
