@@ -12,6 +12,8 @@ export const SELECTED_COMIC = 'SELECTED_COMIC';
 export const LOAD_COMICS_OFFSET_SUCCESS = 'LOAD_COMICS_OFFSET_SUCCESS';
 export const SEARCH_COMICS = 'SEARCH_COMICS';
 export const SEARCH_COMICS_SUCCESS = 'SEARCH_COMICS_SUCCESS';
+export const SEARCH_COMICS_BY_YEAR = 'SEARCH_COMICS_BY_YEAR';
+export const SEARCH_COMICS_BY_YEAR_SUCCESS = 'SEARCH_COMICS_BY_YEAR_SUCCESS';
 
 @Injectable()
 export class ComicsActions{
@@ -70,5 +72,21 @@ export class ComicsActions{
       payload: comics
     };
   }
+
+  searchComicsByYear(year : number) : Action {
+    return {
+      type: SEARCH_COMICS_BY_YEAR,
+      payload: year
+    }
+  }
+
+  searchComicsByYearSuccess(comics : any) : Action {
+    return {
+      type: SEARCH_COMICS_SUCCESS,
+      payload: comics
+    };
+  }
+
+
 
 }

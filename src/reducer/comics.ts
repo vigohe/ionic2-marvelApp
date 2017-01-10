@@ -1,6 +1,6 @@
 import {
   LOAD_COMICS, LOAD_COMICS_SUCCESS, LOAD_COMICS_FAIL, LOAD_COMICS_OFFSET,
-  LOAD_COMICS_OFFSET_SUCCESS, SEARCH_COMICS, SEARCH_COMICS_SUCCESS
+  LOAD_COMICS_OFFSET_SUCCESS, SEARCH_COMICS, SEARCH_COMICS_SUCCESS, SEARCH_COMICS_BY_YEAR, SEARCH_COMICS_BY_YEAR_SUCCESS
 } from "../actions/comics";
 import {Action} from "@ngrx/store";
 /**
@@ -16,7 +16,8 @@ export interface State{
   limit : number,
   loadingOffset : boolean,
   completeOffset : boolean,
-  searchTitle : string | null
+  searchTitle : string | null,
+  startYear: number | null
 }
 
 const initialState : State = {
@@ -28,7 +29,8 @@ const initialState : State = {
   limit : 5,
   loadingOffset : false,
   completeOffset : false,
-  searchTitle : null
+  searchTitle : null,
+  startYear : null
 };
 
 export function reducer(state = initialState, action : Action) : State {
@@ -51,7 +53,8 @@ export function reducer(state = initialState, action : Action) : State {
         limit : state.limit,
         loadingOffset: false,
         completeOffset: false,
-        searchTitle : null
+        searchTitle : action.payload.searchTitle,
+        startYear: action.payload.start
       };
 
     case LOAD_COMICS_OFFSET:
@@ -70,7 +73,8 @@ export function reducer(state = initialState, action : Action) : State {
         limit : state.limit,
         loadingOffset: false,
         completeOffset: true,
-        searchTitle: state.searchTitle
+        searchTitle: state.searchTitle,
+        startYear: state.startYear
       };
 
     case SEARCH_COMICS:
@@ -90,8 +94,31 @@ export function reducer(state = initialState, action : Action) : State {
         limit : state.limit,
         loadingOffset: false,
         completeOffset: true,
-        searchTitle: state.searchTitle
+        searchTitle: state.searchTitle,
+        startYear: state.startYear
       };
+
+    case SEARCH_COMICS_BY_YEAR:
+      return Object.assign({}, state, {
+        loading : true,
+        complete : false,
+        startYear : action.payload
+      });
+
+    case SEARCH_COMICS_BY_YEAR_SUCCESS:
+      return {
+        entities : action.payload,
+        loading : false,
+        complete : true,
+        selectedComicId : null,
+        offset : 0,
+        limit : state.limit,
+        loadingOffset: false,
+        completeOffset: true,
+        searchTitle: state.searchTitle,
+        startYear: state.startYear
+      };
+
 
     default:
       return state;
@@ -108,3 +135,4 @@ export const getOffset = (state: State) => state.offset;
 export const getLoadingOffset = (state: State) => state.loadingOffset;
 export const getCompleteOffset = (state: State) => state.completeOffset;
 export const getSearchTitle = (state: State) => state.searchTitle;
+export const getStartYear = (state: State) => state.startYear;

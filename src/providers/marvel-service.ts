@@ -23,10 +23,10 @@ export class MarvelService {
 
     let params: URLSearchParams = new URLSearchParams();
 
-
     if(search != null){
       if(search.title != null) params.set('titleStartsWith', search.title);
       if(search.offset != null) params.set('offset', search.offset);
+      if(search.startYear != null) params.set('startYear', search.startYear);
     }
 
     return this.http.get(API_MARLVEL, {search : params})

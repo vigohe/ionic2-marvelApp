@@ -31,3 +31,4 @@ export const getComicsOffset = createSelector(getComicsState, fromComics.getOffs
 export const getComicsLoadingOffset = createSelector(getComicsState,fromComics.getLoadingOffset);
 export const getComicsCompleteOffset = createSelector(getComicsState,fromComics.getCompleteOffset);
 export const getComicsSearchTitle = createSelector(getComicsState, fromComics.getSearchTitle);
+export const getComicsStartYear = createSelector(getComicsState, fromComics.getStartYear);
