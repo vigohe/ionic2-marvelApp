@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-navbar color="primary">
+  <ion-navbar>
     <ion-title>Marvel Comics</ion-title>
     <ion-list>
       <ion-searchbar (ionInput)="getItems($event)"></ion-searchbar>
@@ -19,10 +19,8 @@
 
 <ion-content padding>
 
-  <ion-card  *ngFor="let comic of comics" >
-    <ion-item>
-      <img src="{{comic.thumbnail.path}}.{{comic.thumbnail.extension}}"/>
-    </ion-item>
+  <ion-card *ngFor="let comic of comics" >
+    <img src="{{comic.thumbnail.path}}.{{comic.thumbnail.extension}}"/>
     <ion-card-content>
       <ion-card-title>
         {{ comic.title }}

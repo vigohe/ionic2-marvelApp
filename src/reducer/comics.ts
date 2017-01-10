@@ -1,6 +1,6 @@
 import {
   LOAD_COMICS, LOAD_COMICS_SUCCESS, LOAD_COMICS_FAIL, LOAD_COMICS_OFFSET,
-  LOAD_COMICS_OFFSET_SUCCESS
+  LOAD_COMICS_OFFSET_SUCCESS, SEARCH_COMICS, SEARCH_COMICS_SUCCESS
 } from "../actions/comics";
 import {Action} from "@ngrx/store";
 /**
@@ -15,7 +15,8 @@ export interface State{
   offset : number,
   limit : number,
   loadingOffset : boolean,
-  completeOffset : boolean
+  completeOffset : boolean,
+  searchTitle : string | null
 }
 
 const initialState : State = {
@@ -26,7 +27,8 @@ const initialState : State = {
   offset : 0,
   limit : 5,
   loadingOffset : false,
-  completeOffset : false
+  completeOffset : false,
+  searchTitle : null
 };
 
 export function reducer(state = initialState, action : Action) : State {
@@ -41,14 +43,15 @@ export function reducer(state = initialState, action : Action) : State {
 
     case LOAD_COMICS_SUCCESS:
       return {
-        entities : state.entities.concat(action.payload.entities),
+        entities : action.payload.entities,
         loading : false,
         complete : true,
         selectedComicId : null,
         offset : action.payload.offset,
-        limit : 5,
+        limit : state.limit,
         loadingOffset: false,
-        completeOffset: false
+        completeOffset: false,
+        searchTitle : null
       };
 
     case LOAD_COMICS_OFFSET:
@@ -60,13 +63,34 @@ export function reducer(state = initialState, action : Action) : State {
     case LOAD_COMICS_OFFSET_SUCCESS:
       return {
         entities : state.entities.concat(action.payload.entities),
+        loading : state.loading,
+        complete : state.complete,
+        selectedComicId : state.selectedComicId,
+        offset : action.payload.offset,
+        limit : state.limit,
+        loadingOffset: false,
+        completeOffset: true,
+        searchTitle: state.searchTitle
+      };
+
+    case SEARCH_COMICS:
+      return Object.assign({}, state, {
+        loading : true,
+        complete : false,
+        searchTitle : action.payload
+      });
+
+    case SEARCH_COMICS_SUCCESS:
+      return {
+        entities : action.payload,
         loading : false,
         complete : true,
         selectedComicId : null,
-        offset : action.payload.offset,
-        limit : 5,
+        offset : 0,
+        limit : state.limit,
         loadingOffset: false,
-        completeOffset: true
+        completeOffset: true,
+        searchTitle: state.searchTitle
       };
 
     default:
@@ -83,3 +107,4 @@ export const getLimit = (state: State) => state.limit;
 export const getOffset = (state: State) => state.offset;
 export const getLoadingOffset = (state: State) => state.loadingOffset;
 export const getCompleteOffset = (state: State) => state.completeOffset;
+export const getSearchTitle = (state: State) => state.searchTitle;

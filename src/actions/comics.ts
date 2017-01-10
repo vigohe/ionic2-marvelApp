@@ -10,6 +10,8 @@ export const LOAD_COMICS_FAIL = 'LOAD_COMICS_FAIL';
 export const LOAD_COMICS_OFFSET = 'LOAD_COMICS_OFFSET';
 export const SELECTED_COMIC = 'SELECTED_COMIC';
 export const LOAD_COMICS_OFFSET_SUCCESS = 'LOAD_COMICS_OFFSET_SUCCESS';
+export const SEARCH_COMICS = 'SEARCH_COMICS';
+export const SEARCH_COMICS_SUCCESS = 'SEARCH_COMICS_SUCCESS';
 
 @Injectable()
 export class ComicsActions{
@@ -18,41 +20,55 @@ export class ComicsActions{
     return {
       type: LOAD_COMICS,
       payload: 0
-    }
+    };
   }
 
   loadComicsSuccess(comics : any) : Action {
     return {
-      type : LOAD_COMICS_SUCCESS,
-      payload : {
-        entities : comics.entities,
-        offset : comics.offset
+      type: LOAD_COMICS_SUCCESS,
+      payload: {
+        entities: comics.entities,
+        offset: comics.offset
       }
-    }
+    };
   }
 
   loadComicsFail(error : any) : Action {
     return {
-      type : LOAD_COMICS_FAIL,
-      payload : error
-    }
+      type: LOAD_COMICS_FAIL,
+      payload: error
+    };
   }
 
   loadComicsOffset() : Action {
     return {
-      type : LOAD_COMICS_OFFSET
-    }
+      type: LOAD_COMICS_OFFSET
+    };
 
   }
 
   loadComicsOffsetSuccess(comics : any) : Action {
-    return{
-      type : LOAD_COMICS_OFFSET_SUCCESS,
-      payload : {
-        entities : comics.entities,
-        offset : comics.offset
+    return {
+      type: LOAD_COMICS_OFFSET_SUCCESS,
+      payload: {
+        entities: comics.entities,
+        offset: comics.offset
       }
-    }
+    };
+  }
+
+  searchComics(title : string) : Action {
+    return {
+      type: SEARCH_COMICS,
+      payload: title
+    };
+  }
+
+  searchComicsSuccess(comics : any) : Action {
+    return {
+      type: SEARCH_COMICS_SUCCESS,
+      payload: comics
+    };
   }
 
 }

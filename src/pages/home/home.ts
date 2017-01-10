@@ -1,5 +1,5 @@
-import {Component} from "@angular/core";
-import {NavController} from "ionic-angular";
+import {Component, ViewChild} from "@angular/core";
+import {NavController, Content} from "ionic-angular";
 import {Subject} from "rxjs";
 import "rxjs/add/operator/map";
 import "rxjs/add/operator/do";
@@ -16,6 +16,7 @@ import {Store} from "@ngrx/store";
 export class HomePage {
   public comics: any [] = [];
   private inputSearch$: Subject<any> = new Subject();
+  @ViewChild(Content) ionContent: Content;
 
   constructor(public navCtrl: NavController,
               private _comicsActions: ComicsActions,
@@ -32,34 +33,24 @@ export class HomePage {
       .map(comics => this.comics = comics)
       .subscribe();
 
+    this.inputSearch$
+      .takeUntil(this.navCtrl.viewWillUnload)
+      .filter(ev => ev.type === 'input')
+      .map(ev => ev.target.value)
+      .debounceTime(1000)
+      .distinctUntilChanged()
+      .map(title => title.length > 0 ?
+        this._store.dispatch(this._comicsActions.searchComics(title)) : this._store.dispatch(this._comicsActions.loadComics()))
+      .subscribe(() => this.ionContent.scrollToTop());
+
+    this.inputSearch$
+      .takeUntil(this.navCtrl.viewWillUnload)
+      .filter(ev => ev.type === 'mousedown')
+      .map(() => this._store.dispatch(this._comicsActions.loadComics()))
+      .subscribe(() => this.ionContent.scrollToTop());
+
     this._store.dispatch(this._comicsActions.loadComics());
 
-    // this._marvelService.getComics()
-    //   .map(res => res.data.results)
-    //   .map(comics => this.comics = comics)
-    //   .first()
-    //   .subscribe();
-    //
-    // this.inputSearch$
-    //   .takeUntil(this.navCtrl.viewWillUnload)
-    //   .filter(ev => ev.type === 'input')
-    //   .map(ev => ev.target.value)
-    //   .debounceTime(1000)
-    //   .distinctUntilChanged()
-    //   .switchMap(text => text.length > 0 ?
-    //     this._marvelService.getComics({title: text}) : this._marvelService.getComics())
-    //   .map(res => res.data.results)
-    //   .map(comics => this.comics = comics)
-    //   .subscribe();
-    //
-    // this.inputSearch$
-    //   .takeUntil(this.navCtrl.viewWillUnload)
-    //   .filter(ev => ev.type === 'mousedown')
-    //   .switchMapTo(
-    //     this._marvelService.getComics()
-    //       .map(res => res.data.results)
-    //       .map(comics => this.comics = comics)
-    //   ).subscribe();
 
   }
 
@@ -78,8 +69,6 @@ export class HomePage {
       .filter(complete => complete)
       .first()
       .subscribe(() => infiniteScroll.complete());
-
-
   }
 
 }
