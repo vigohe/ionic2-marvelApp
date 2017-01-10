@@ -1,13 +1,11 @@
-import {Component} from '@angular/core';
-
-import {NavController} from 'ionic-angular';
-import {MarvelService} from "../../providers/marvel-service";
-import {Observable, Subject} from "rxjs";
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/takeUntil';
-import * as fromRoot from '../../reducer/index';
+import {Component} from "@angular/core";
+import {NavController} from "ionic-angular";
+import {Subject} from "rxjs";
+import "rxjs/add/operator/map";
+import "rxjs/add/operator/do";
+import "rxjs/add/operator/debounceTime";
+import "rxjs/add/operator/takeUntil";
+import * as fromRoot from "../../reducer/index";
 import {ComicsActions} from "../../actions/comics";
 import {Store} from "@ngrx/store";
 
@@ -16,13 +14,10 @@ import {Store} from "@ngrx/store";
   templateUrl: 'home.html'
 })
 export class HomePage {
-  public comics$: Observable<any>;
   public comics: any [] = [];
   private inputSearch$: Subject<any> = new Subject();
-  private infiniteScroll$: Subject<any> = new Subject();
 
   constructor(public navCtrl: NavController,
-              private _marvelService: MarvelService,
               private _comicsActions: ComicsActions,
               private _store : Store<fromRoot.State>
   ) {
@@ -76,9 +71,15 @@ export class HomePage {
 
     console.log("doInfinite");
 
-    this._store.select(fromRoot.getComicsComplete).skip(1).first().subscribe(() => infiniteScroll.complete() );
-
     this._store.dispatch(this._comicsActions.loadComicsOffset());
+
+    this._store
+      .select(fromRoot.getComicsCompleteOffset)
+      .filter(complete => complete)
+      .first()
+      .subscribe(() => infiniteScroll.complete());
+
+
   }
 
 }

@@ -9,6 +9,7 @@ export const LOAD_COMICS_SUCCESS = 'LOAD_COMICS_SUCCESS';
 export const LOAD_COMICS_FAIL = 'LOAD_COMICS_FAIL';
 export const LOAD_COMICS_OFFSET = 'LOAD_COMICS_OFFSET';
 export const SELECTED_COMIC = 'SELECTED_COMIC';
+export const LOAD_COMICS_OFFSET_SUCCESS = 'LOAD_COMICS_OFFSET_SUCCESS';
 
 @Injectable()
 export class ComicsActions{
@@ -42,6 +43,16 @@ export class ComicsActions{
       type : LOAD_COMICS_OFFSET
     }
 
+  }
+
+  loadComicsOffsetSuccess(comics : any) : Action {
+    return{
+      type : LOAD_COMICS_OFFSET_SUCCESS,
+      payload : {
+        entities : comics.entities,
+        offset : comics.offset
+      }
+    }
   }
 
 }

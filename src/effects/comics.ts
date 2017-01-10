@@ -28,13 +28,13 @@ export class ComicsEffects {
   @Effect()
   loadComicsOffset$: Observable<Action> = this._actions$
     .ofType(LOAD_COMICS_OFFSET)
-    .zip(this._store.select(fromRoot.getComicsLimit).first(), this._store.select(fromRoot.getComicsOffset).first(), (limit,offset) => limit + offset)
+    .switchMap(() => Observable.zip( this._store.select(fromRoot.getComicsLimit).first(), this._store.select(fromRoot.getComicsOffset).first(), (limit,offset) => limit + offset ))
     .do(x=>console.log("LOAD_COMICS_OFFSET",x))
     .switchMap(offset => this._marvelService.getComics({offset: offset}).catch(error => Observable.of(this._comicsActions.loadComicsFail(error))))
     .map(res => {
       return {offset: res.data.offset, entities: res.data.results};
     })
-    .map(comics => this._comicsActions.loadComicsSuccess(comics));
+    .map(comics => this._comicsActions.loadComicsOffsetSuccess(comics));
 
 
 }

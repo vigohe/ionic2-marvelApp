@@ -28,3 +28,5 @@ export const getComicsLoading = createSelector(getComicsState,fromComics.getLoad
 export const getComicsComplete = createSelector(getComicsState,fromComics.getComplete);
 export const getComicsLimit = createSelector(getComicsState, fromComics.getLimit);
 export const getComicsOffset = createSelector(getComicsState, fromComics.getOffset);
+export const getComicsLoadingOffset = createSelector(getComicsState,fromComics.getLoadingOffset);
+export const getComicsCompleteOffset = createSelector(getComicsState,fromComics.getCompleteOffset);
