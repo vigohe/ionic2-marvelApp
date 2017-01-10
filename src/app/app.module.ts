@@ -6,6 +6,12 @@ import { ContactPage } from '../pages/contact/contact';
 import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
 import {MarvelService} from "../providers/marvel-service";
+import {StoreModule} from "@ngrx/store";
+import {rootReducer} from "../reducer/index";
+import {StoreDevtoolsModule} from "@ngrx/store-devtools";
+import {EffectsModule} from "@ngrx/effects";
+import {ComicsEffects} from "../effects/comics";
+import {ComicsActions} from "../actions/comics";
 
 @NgModule({
   declarations: [
@@ -16,7 +22,10 @@ import {MarvelService} from "../providers/marvel-service";
     TabsPage
   ],
   imports: [
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp),
+    StoreModule.provideStore(rootReducer),
+    StoreDevtoolsModule.instrumentOnlyWithExtension(),
+    EffectsModule.run(ComicsEffects)
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -26,6 +35,8 @@ import {MarvelService} from "../providers/marvel-service";
     HomePage,
     TabsPage
   ],
-  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler},MarvelService]
+  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}
+    ,MarvelService
+    ,ComicsActions]
 })
 export class AppModule {}
