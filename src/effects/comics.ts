@@ -26,7 +26,13 @@ export class ComicsEffects {
     .map(res => {
       return {offset: res.data.offset, entities: res.data.results};
     })
-    .map(comics => this._comicsActions.loadComicsSuccess(comics));
+    .map(comics => {
+      if (comics.entities.length > 0) {
+        return this._comicsActions.loadComicsSuccess(comics);
+      } else {
+        return this._comicsActions.comicsNotFound();
+      }
+    });
 
   @Effect()
   loadComicsOffset$: Observable<Action> = this._actions$
@@ -56,7 +62,13 @@ export class ComicsEffects {
       }))
     .switchMap(search => this._marvelService.getComics({offset: 0, title: search.title, startYear : search.startYear }).catch(error => Observable.of(this._comicsActions.loadComicsFail(error))))
     .map(res => res.data.results)
-    .map(comics => this._comicsActions.searchComicsSuccess(comics));
+    .map(comics =>{
+      if (comics.length > 0) {
+        return this._comicsActions.searchComicsSuccess(comics)
+      } else {
+        return this._comicsActions.comicsNotFound();
+      }
+    });
 
 
   @Effect()
@@ -70,7 +82,13 @@ export class ComicsEffects {
       }))
     .switchMap(search => this._marvelService.getComics({offset: 0, startYear: search.startYear, title: search.title }).catch(error => Observable.of(this._comicsActions.loadComicsFail(error))))
     .map(res => res.data.results)
-    .map(comics => this._comicsActions.searchComicsSuccess(comics));
+    .map(comics => {
+      if (comics.length > 0) {
+        return this._comicsActions.searchComicsSuccess(comics);
+      } else {
+        return this._comicsActions.comicsNotFound();
+      }
+    });
 
 
   @Effect()

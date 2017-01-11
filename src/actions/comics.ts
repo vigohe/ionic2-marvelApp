@@ -16,6 +16,7 @@ export const SEARCH_COMICS_BY_YEAR = 'SEARCH_COMICS_BY_YEAR';
 export const SEARCH_COMICS_BY_YEAR_SUCCESS = 'SEARCH_COMICS_BY_YEAR_SUCCESS';
 export const SEARCH_COMICS_CLEAR = 'SEARCH_COMICS_CLEAR';
 export const SEARCH_COMICS_BY_YEAR_CLEAR = 'SEARCH_COMICS_BY_YEAR_CLEAR';
+export const COMICS_NOT_FOUND = 'COMICS_NOT_FOUND';
 
 
 @Injectable()
@@ -100,6 +101,12 @@ export class ComicsActions{
     return {
       type: SEARCH_COMICS_BY_YEAR_CLEAR
     }
+  }
+
+  comicsNotFound() : Action{
+    return {
+      type: COMICS_NOT_FOUND
+    };
   }
 
 

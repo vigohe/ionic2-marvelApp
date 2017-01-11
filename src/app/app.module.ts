@@ -12,6 +12,8 @@ import {StoreDevtoolsModule} from "@ngrx/store-devtools";
 import {EffectsModule} from "@ngrx/effects";
 import {ComicsEffects} from "../effects/comics";
 import {ComicsActions} from "../actions/comics";
+import {ComicListComponent} from "../components/comic-list/comic-list";
+import {ComicItemComponent} from "../components/comic-item/comic-item";
 
 @NgModule({
   declarations: [
@@ -19,7 +21,9 @@ import {ComicsActions} from "../actions/comics";
     AboutPage,
     ContactPage,
     HomePage,
-    TabsPage
+    TabsPage,
+    ComicListComponent,
+    ComicItemComponent
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -33,7 +37,9 @@ import {ComicsActions} from "../actions/comics";
     AboutPage,
     ContactPage,
     HomePage,
-    TabsPage
+    TabsPage,
+    ComicListComponent,
+    ComicItemComponent
   ],
   providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}
     ,MarvelService

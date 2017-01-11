@@ -1,0 +1,15 @@
+<!--
+  Generated template for the ComicItem component.
+
+  See https://angular.io/docs/ts/latest/api/core/index/ComponentMetadata-class.html
+  for more info on Angular 2 Components.
+-->
+<ion-card>
+  <img src="{{comic.thumbnail.path}}.{{comic.thumbnail.extension}}"/>
+  <ion-card-content>
+    <ion-card-title>
+      {{comic.title}}
+    </ion-card-title>
+    <p>{{comic?.textObjects[0]?.text}}</p>
+  </ion-card-content>
+</ion-card>

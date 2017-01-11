@@ -20,20 +20,17 @@
   </ion-navbar>
 </ion-header>
 
-
-
 <ion-content padding>
 
-  <ion-card *ngFor="let comic of comics" >
-    <img src="{{comic.thumbnail.path}}.{{comic.thumbnail.extension}}"/>
-    <ion-card-content>
-      <ion-card-title>
-        {{ comic.title }}
-      </ion-card-title>
-      <p>{{comic?.textObjects[0]?.text}}</p>
-    </ion-card-content>
-  </ion-card>
+  <div class="mv-center" *ngIf="isLoading$ | async">
+    <ion-spinner></ion-spinner>
+  </div>
 
+  <div class="mv-center" *ngIf="notFound$ | async">
+    <h1><ion-icon name="search"></ion-icon> Not found</h1>
+  </div>
+
+  <comic-list [comics]="comics$ | async"></comic-list>
 
   <ion-infinite-scroll (ionInfinite)="infiniteScrolling$.next($event)">
     <ion-infinite-scroll-content></ion-infinite-scroll-content>
