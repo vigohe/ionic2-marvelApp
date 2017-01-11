@@ -7,7 +7,10 @@ import {Effect, Actions} from "@ngrx/effects";
 import {Observable} from "rxjs";
 import {Action, Store} from "@ngrx/store";
 import {MarvelService} from "../providers/marvel-service";
-import {LOAD_COMICS, ComicsActions, LOAD_COMICS_OFFSET, SEARCH_COMICS, SEARCH_COMICS_BY_YEAR} from "../actions/comics";
+import {
+  LOAD_COMICS, ComicsActions, LOAD_COMICS_OFFSET, SEARCH_COMICS, SEARCH_COMICS_BY_YEAR,
+  SEARCH_COMICS_CLEAR, SEARCH_COMICS_BY_YEAR_CLEAR
+} from "../actions/comics";
 import * as fromRoot from "../reducer/index";
 
 @Injectable()
@@ -15,8 +18,6 @@ export class ComicsEffects {
 
   constructor(private _actions$: Actions, private _marvelService: MarvelService, private _comicsActions: ComicsActions, private _store: Store<fromRoot.State>) {
   }
-
-  //TODO : Al limpiar no se debe perder filtro!!!!
 
   @Effect()
   loadComics$: Observable<Action> = this._actions$
@@ -47,10 +48,11 @@ export class ComicsEffects {
   searchComics$ : Observable<Action> = this._actions$
     .ofType(SEARCH_COMICS)
     .map(action => action.payload)
-    .switchMap(title => Observable.zip(Observable.of(title),
+    .switchMap(title => Observable.zip(
+      Observable.of(title),
       this._store.select(fromRoot.getComicsStartYear),
       (searchTitle,startYear) => {
-        return {startYear : startYear, title : searchTitle, }
+        return {startYear : startYear, title : searchTitle}
       }))
     .switchMap(search => this._marvelService.getComics({offset: 0, title: search.title, startYear : search.startYear }).catch(error => Observable.of(this._comicsActions.loadComicsFail(error))))
     .map(res => res.data.results)
@@ -69,6 +71,22 @@ export class ComicsEffects {
     .switchMap(search => this._marvelService.getComics({offset: 0, startYear: search.startYear, title: search.title }).catch(error => Observable.of(this._comicsActions.loadComicsFail(error))))
     .map(res => res.data.results)
     .map(comics => this._comicsActions.searchComicsSuccess(comics));
+
+
+  @Effect()
+  loadComicsClear$: Observable<Action> = this._actions$
+    .ofType(SEARCH_COMICS_CLEAR,SEARCH_COMICS_BY_YEAR_CLEAR)
+    .switchMap(offset => Observable.zip(
+      this._store.select(fromRoot.getComicsSearchTitle),
+      this._store.select(fromRoot.getComicsStartYear),
+      this._store.select(fromRoot.getComicsOffset),
+      (searchTitle,startYear,offset) => {
+        return {title : searchTitle,startYear: startYear,offset: offset}
+      }))
+    .switchMap(search => this._marvelService.getComics(search).catch(error => Observable.of(this._comicsActions.loadComicsFail(error))))
+    .map(res => res.data.results)
+    .map(comics => this._comicsActions.searchComicsSuccess(comics));
+
 
 
 }

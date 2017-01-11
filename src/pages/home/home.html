@@ -3,7 +3,7 @@
     <ion-title>Marvel Comics</ion-title>
     <ion-list>
 
-      <ion-searchbar (ionInput)="getItems($event)" placeholder="Search your favorite comic..."></ion-searchbar>
+      <ion-searchbar (ionInput)="inputSearch$.next($event)" placeholder="Search your favorite comic..."></ion-searchbar>
 
       <ion-item>
         <ion-icon name="calendar" item-left></ion-icon>
@@ -35,7 +35,7 @@
   </ion-card>
 
 
-  <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+  <ion-infinite-scroll (ionInfinite)="infiniteScrolling$.next($event)">
     <ion-infinite-scroll-content></ion-infinite-scroll-content>
   </ion-infinite-scroll>
 

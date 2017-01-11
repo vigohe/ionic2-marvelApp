@@ -14,6 +14,9 @@ export const SEARCH_COMICS = 'SEARCH_COMICS';
 export const SEARCH_COMICS_SUCCESS = 'SEARCH_COMICS_SUCCESS';
 export const SEARCH_COMICS_BY_YEAR = 'SEARCH_COMICS_BY_YEAR';
 export const SEARCH_COMICS_BY_YEAR_SUCCESS = 'SEARCH_COMICS_BY_YEAR_SUCCESS';
+export const SEARCH_COMICS_CLEAR = 'SEARCH_COMICS_CLEAR';
+export const SEARCH_COMICS_BY_YEAR_CLEAR = 'SEARCH_COMICS_BY_YEAR_CLEAR';
+
 
 @Injectable()
 export class ComicsActions{
@@ -87,6 +90,17 @@ export class ComicsActions{
     };
   }
 
+  searchComicsClear() : Action {
+    return {
+      type: SEARCH_COMICS_CLEAR
+    }
+  }
+
+  searchComicsByYearClear() : Action {
+    return {
+      type: SEARCH_COMICS_BY_YEAR_CLEAR
+    }
+  }
 
 
 }

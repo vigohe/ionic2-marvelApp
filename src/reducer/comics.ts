@@ -1,6 +1,7 @@
 import {
   LOAD_COMICS, LOAD_COMICS_SUCCESS, LOAD_COMICS_FAIL, LOAD_COMICS_OFFSET,
-  LOAD_COMICS_OFFSET_SUCCESS, SEARCH_COMICS, SEARCH_COMICS_SUCCESS, SEARCH_COMICS_BY_YEAR, SEARCH_COMICS_BY_YEAR_SUCCESS
+  LOAD_COMICS_OFFSET_SUCCESS, SEARCH_COMICS, SEARCH_COMICS_SUCCESS, SEARCH_COMICS_BY_YEAR,
+  SEARCH_COMICS_BY_YEAR_SUCCESS, SEARCH_COMICS_CLEAR, SEARCH_COMICS_BY_YEAR_CLEAR
 } from "../actions/comics";
 import {Action} from "@ngrx/store";
 /**
@@ -119,6 +120,21 @@ export function reducer(state = initialState, action : Action) : State {
         startYear: state.startYear
       };
 
+    case SEARCH_COMICS_CLEAR:
+      return Object.assign({}, state, {
+        loading: true,
+        complete: false,
+        searchTitle : initialState.searchTitle,
+        offset : initialState.offset
+      });
+
+    case SEARCH_COMICS_BY_YEAR_CLEAR:
+      return Object.assign({}, state, {
+        loading: true,
+        complete: false,
+        startYear : initialState.startYear,
+        offset : initialState.offset
+      });
 
     default:
       return state;

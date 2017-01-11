@@ -1,6 +1,6 @@
 import {Component, ViewChild} from "@angular/core";
-import {NavController, Content, Select, DateTime, Button} from "ionic-angular";
-import {Subject} from "rxjs";
+import {NavController, Content, Select, DateTime, Button, LoadingController, Loading} from "ionic-angular";
+import {Subject, Observable} from "rxjs";
 import "rxjs/add/operator/map";
 import "rxjs/add/operator/do";
 import "rxjs/add/operator/debounceTime";
@@ -18,13 +18,13 @@ export class HomePage {
   public startYear: any;
   private inputSearch$: Subject<any> = new Subject();
   private clearYear$: Subject<any> = new Subject();
+  private infiniteScrolling$: Subject<any> = new Subject();
 
   @ViewChild(Content) ionContent: Content;
   @ViewChild(DateTime) ionDate: DateTime;
 
-
-
   constructor(public navCtrl: NavController,
+              public loadingCtrl : LoadingController,
               private _comicsActions: ComicsActions,
               private _store : Store<fromRoot.State>
   ) {
@@ -32,6 +32,15 @@ export class HomePage {
 
   ionViewDidLoad() {
     console.log('Hello HomePage Page');
+
+    this._store.select(fromRoot.getComicsLoading)
+      .takeUntil(this.navCtrl.viewWillUnload)
+      .filter(isloading => isloading)
+      .map(() => this.createLoader())
+      .do(loading => loading.present())
+      .delayWhen(loading => this._store.select(fromRoot.getComicsComplete).filter(complete => complete))
+      .map(loading => loading.dismiss())
+      .subscribe();
 
     this._store.select(fromRoot.getComicsEntities)
       .takeUntil(this.navCtrl.viewWillUnload)
@@ -45,16 +54,14 @@ export class HomePage {
       .debounceTime(1000)
       .distinctUntilChanged()
       .do(title => title.length > 0 ?
-        this._store.dispatch(this._comicsActions.searchComics(title)) : this._store.dispatch(this._comicsActions.loadComics()))
+        this._store.dispatch(this._comicsActions.searchComics(title)) : this._store.dispatch(this._comicsActions.searchComicsClear()))
       .subscribe(() => this.ionContent.scrollToTop());
 
     this.inputSearch$
       .takeUntil(this.navCtrl.viewWillUnload)
       .filter(ev => ev.type === 'mousedown')
-      .map(() => this._store.dispatch(this._comicsActions.loadComics()))
+      .map(() => this._store.dispatch(this._comicsActions.searchComicsClear()))
       .subscribe(() => this.ionContent.scrollToTop());
-
-    this._store.dispatch(this._comicsActions.loadComics());
 
     this.ionDate.ionChange
       .takeUntil(this.navCtrl.viewWillUnload)
@@ -64,24 +71,24 @@ export class HomePage {
 
     this.clearYear$
       .takeUntil(this.navCtrl.viewWillUnload)
-      .do(() => this._store.dispatch(this._comicsActions.loadComics()))
+      .do(() => this._store.dispatch(this._comicsActions.searchComicsByYearClear()))
       .subscribe(() => this.startYear = null);
 
+    this.infiniteScrolling$
+      .do(() => this._store.dispatch(this._comicsActions.loadComicsOffset()))
+      .delayWhen(() => this._store
+        .select(fromRoot.getComicsCompleteOffset)
+        .filter(complete => complete))
+      .map(infiniteScroll => infiniteScroll.complete())
+      .subscribe();
+
+    this._store.dispatch(this._comicsActions.loadComics());
+
+
   }
 
-  getItems(ev: any) {
-    this.inputSearch$.next(ev);
-  }
-
-  doInfinite(infiniteScroll: any) {
-
-    this._store.dispatch(this._comicsActions.loadComicsOffset());
-
-    this._store
-      .select(fromRoot.getComicsCompleteOffset)
-      .filter(complete => complete)
-      .first()
-      .subscribe(() => infiniteScroll.complete());
+  createLoader() : Loading {
+    return this.loadingCtrl.create({content: "Loading..."});
   }
 
 }
