@@ -1,4 +1,4 @@
-import {Component, ViewChild} from "@angular/core";
+import {Component, ViewChild, OnDestroy} from "@angular/core";
 import {NavController, Content, DateTime, LoadingController} from "ionic-angular";
 import {Subject, Observable} from "rxjs";
 import "rxjs/add/operator/map";
@@ -13,7 +13,7 @@ import {Store} from "@ngrx/store";
   selector: 'page-home',
   templateUrl: 'home.html'
 })
-export class HomePage {
+export class HomePage implements OnDestroy {
   public comics$: Observable<any>;
   public isLoading$: Observable<any>;
   public notFound$: Observable<any>;
@@ -21,6 +21,7 @@ export class HomePage {
   private inputSearch$: Subject<any> = new Subject();
   private clearYear$: Subject<any> = new Subject();
   private infiniteScrolling$: Subject<any> = new Subject();
+  private destroy$: Subject<any> = new Subject();
 
   @ViewChild(Content) ionContent: Content;
   @ViewChild(DateTime) ionDate: DateTime;
@@ -34,12 +35,13 @@ export class HomePage {
     console.log('Hello HomePage Page');
 
     this.comics$ = this._store.select(fromRoot.getComicsEntities);
-    this.isLoading$ = this._store.select(fromRoot.getComicsLoading).do(() => this.ionContent.scrollToTop());
+    this.isLoading$ = this._store.select(fromRoot.getComicsLoading)
+      .do(() => this.ionContent.scrollToTop());
     this.notFound$ = this._store.select(fromRoot.getComicsNotFound);
 
 
     this.inputSearch$
-      .takeUntil(this.navCtrl.viewWillUnload)
+      .takeUntil(this.destroy$)
       .filter(ev => ev.type === 'input')
       .map(ev => ev.target.value)
       .debounceTime(1000)
@@ -49,19 +51,19 @@ export class HomePage {
       .subscribe();
 
     this.inputSearch$
-      .takeUntil(this.navCtrl.viewWillUnload)
+      .takeUntil(this.destroy$)
       .filter(ev => ev.type === 'mousedown')
       .map(() => this._store.dispatch(this._comicsActions.searchComicsClear()))
       .subscribe();
 
     this.ionDate.ionChange
-      .takeUntil(this.navCtrl.viewWillUnload)
+      .takeUntil(this.destroy$)
       .map(date => date.year.value)
       .map(startYear => this._store.dispatch(this._comicsActions.searchComicsByYear(startYear)))
       .subscribe();
 
     this.clearYear$
-      .takeUntil(this.navCtrl.viewWillUnload)
+      .takeUntil(this.destroy$)
       .do(() => this._store.dispatch(this._comicsActions.searchComicsByYearClear()))
       .do(() => this.startYear = null).subscribe();
 
@@ -74,6 +76,11 @@ export class HomePage {
 
     this._store.dispatch(this._comicsActions.loadComics());
 
+  }
+
+  ngOnDestroy(){
+    this.destroy$.next();
+    this.destroy$.unsubscribe();
   }
 
 

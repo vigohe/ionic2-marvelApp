@@ -17,7 +17,9 @@ export const SEARCH_COMICS_BY_YEAR_SUCCESS = 'SEARCH_COMICS_BY_YEAR_SUCCESS';
 export const SEARCH_COMICS_CLEAR = 'SEARCH_COMICS_CLEAR';
 export const SEARCH_COMICS_BY_YEAR_CLEAR = 'SEARCH_COMICS_BY_YEAR_CLEAR';
 export const COMICS_NOT_FOUND = 'COMICS_NOT_FOUND';
-
+export const LOAD_COMIC_CHARACTERS = 'LOAD_COMIC_CHARACTERS';
+export const LOAD_COMIC_CHARACTERS_SUCCESS = 'LOAD_COMIC_CHARACTERS_SUCCESS';
+export const LOAD_COMIC_CHARACTERS_FAIL = 'LOAD_COMIC_CHARACTERS_FAIL';
 
 @Injectable()
 export class ComicsActions{
@@ -94,13 +96,13 @@ export class ComicsActions{
   searchComicsClear() : Action {
     return {
       type: SEARCH_COMICS_CLEAR
-    }
+    };
   }
 
   searchComicsByYearClear() : Action {
     return {
       type: SEARCH_COMICS_BY_YEAR_CLEAR
-    }
+    };
   }
 
   comicsNotFound() : Action{
@@ -109,5 +111,30 @@ export class ComicsActions{
     };
   }
 
+  selectedComic(comicId : number) : Action {
+    return {
+      type: SELECTED_COMIC,
+      payload: comicId
+    };
+  }
+
+  loadComicCharacters() : Action {
+    return {
+      type: LOAD_COMIC_CHARACTERS
+    };
+  }
+
+  loadComicCharactersSuccess(characters : any) : Action {
+    return {
+      type: LOAD_COMIC_CHARACTERS_SUCCESS,
+      payload: characters
+    };
+  }
+
+  loadComicCharactersFail() : Action {
+    return {
+      type: LOAD_COMIC_CHARACTERS_FAIL
+    };
+  }
 
 }

@@ -1,9 +1,11 @@
 import {
   LOAD_COMICS, LOAD_COMICS_SUCCESS, LOAD_COMICS_FAIL, LOAD_COMICS_OFFSET,
   LOAD_COMICS_OFFSET_SUCCESS, SEARCH_COMICS, SEARCH_COMICS_SUCCESS, SEARCH_COMICS_BY_YEAR,
-  SEARCH_COMICS_BY_YEAR_SUCCESS, SEARCH_COMICS_CLEAR, SEARCH_COMICS_BY_YEAR_CLEAR, COMICS_NOT_FOUND
+  SEARCH_COMICS_BY_YEAR_SUCCESS, SEARCH_COMICS_CLEAR, SEARCH_COMICS_BY_YEAR_CLEAR, COMICS_NOT_FOUND, SELECTED_COMIC,
+  LOAD_COMIC_CHARACTERS, LOAD_COMIC_CHARACTERS_SUCCESS
 } from "../actions/comics";
 import {Action} from "@ngrx/store";
+import {createSelector} from "reselect";
 /**
  * Created by vigohe on 09-01-17.
  */
@@ -19,7 +21,8 @@ export interface State{
   completeOffset : boolean,
   searchTitle : string | null,
   startYear: number | null,
-  notFound: boolean
+  notFound: boolean,
+  characters : any []
 }
 
 const initialState : State = {
@@ -33,7 +36,8 @@ const initialState : State = {
   completeOffset : false,
   searchTitle : null,
   startYear : null,
-  notFound: false
+  notFound: false,
+  characters: []
 };
 
 export function reducer(state = initialState, action : Action) : State {
@@ -59,7 +63,8 @@ export function reducer(state = initialState, action : Action) : State {
         completeOffset: false,
         searchTitle : action.payload.searchTitle,
         startYear: action.payload.start,
-        notFound: false
+        notFound: false,
+        characters: []
       };
 
     case LOAD_COMICS_OFFSET:
@@ -80,7 +85,8 @@ export function reducer(state = initialState, action : Action) : State {
         completeOffset: true,
         searchTitle: state.searchTitle,
         startYear: state.startYear,
-        notFound: false
+        notFound: false,
+        characters: []
       };
 
     case SEARCH_COMICS:
@@ -103,7 +109,8 @@ export function reducer(state = initialState, action : Action) : State {
         completeOffset: true,
         searchTitle: state.searchTitle,
         startYear: state.startYear,
-        notFound: false
+        notFound: false,
+        characters: []
       };
 
     case SEARCH_COMICS_BY_YEAR:
@@ -126,7 +133,8 @@ export function reducer(state = initialState, action : Action) : State {
         completeOffset: true,
         searchTitle: state.searchTitle,
         startYear: state.startYear,
-        notFound: false
+        notFound: false,
+        characters : []
       };
 
     case SEARCH_COMICS_CLEAR:
@@ -155,6 +163,21 @@ export function reducer(state = initialState, action : Action) : State {
         notFound: true
       });
 
+    case SELECTED_COMIC:
+      return Object.assign({}, state, {
+        selectedComicId: action.payload
+      });
+
+    case LOAD_COMIC_CHARACTERS:
+      return Object.assign({}, state, {
+        characters : []
+      });
+
+    case LOAD_COMIC_CHARACTERS_SUCCESS:
+      return Object.assign({}, state, {
+        characters : action.payload
+      });
+
     default:
       return state;
   }
@@ -172,3 +195,13 @@ export const getCompleteOffset = (state: State) => state.completeOffset;
 export const getSearchTitle = (state: State) => state.searchTitle;
 export const getStartYear = (state: State) => state.startYear;
 export const getNotFound = (state: State) => state.notFound;
+export const getCharacters = (state: State) => state.characters;
+export const getSelectedId = (state: State) => state.selectedComicId;
+
+
+export const getSelected = createSelector(
+  getEntities,
+  getSelectedId,
+  (entities , selectedId) => entities.find(comic => comic.id === selectedId)
+);
+

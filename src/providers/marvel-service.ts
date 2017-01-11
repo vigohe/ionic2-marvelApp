@@ -10,7 +10,9 @@ import {Observable} from "rxjs";
   See https://angular.io/docs/ts/latest/guide/dependency-injection.html
   for more info on providers and Angular 2 DI.
 */
-export const API_MARLVEL = "https://gateway.marvel.com:443/v1/public/comics?limit=5&apikey=9b87dae0e58fe8d0482c6d90a347c988&hash=59ac14f2bd20e50f967dc8765bfd5262&ts=1483976056";
+
+const API_KEY = "?apikey=9b87dae0e58fe8d0482c6d90a347c988&hash=59ac14f2bd20e50f967dc8765bfd5262&ts=1483976056";
+const API_MARVEL = "https://gateway.marvel.com:443/v1/public";
 
 @Injectable()
 export class MarvelService {
@@ -29,7 +31,12 @@ export class MarvelService {
       if(search.startYear != null) params.set('startYear', search.startYear);
     }
 
-    return this.http.get(API_MARLVEL, {search : params})
+    return this.http.get(API_MARVEL + "/comics" + API_KEY, {search : params})
+      .map(res => res.json());
+  }
+
+  getCharacters(comicId : number){
+    return this.http.get(API_MARVEL+"/comics/"+comicId+"/characters" + API_KEY)
       .map(res => res.json());
   }
 

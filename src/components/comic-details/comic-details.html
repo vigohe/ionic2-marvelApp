@@ -1,0 +1,18 @@
+<!--
+  Generated template for the ComicDetails component.
+
+  See https://angular.io/docs/ts/latest/api/core/index/ComponentMetadata-class.html
+  for more info on Angular 2 Components.
+-->
+
+<h1>{{comic?.title}}</h1>
+
+<ion-slides>
+  <ion-slide *ngFor="let image of comic?.images">
+    <img src="{{image.path}}.{{image.extension}}"/>
+  </ion-slide>
+</ion-slides>
+
+<ion-list>
+  <ion-item></ion-item>
+</ion-list>

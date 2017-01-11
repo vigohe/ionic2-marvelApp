@@ -5,5 +5,5 @@
   for more info on Angular 2 Components.
 -->
 
-<comic-item *ngFor="let comic of comics" [comic]="comic"></comic-item>
+<comic-item (click)="onClick$.next(comic)" *ngFor="let comic of comics" [comic]="comic"></comic-item>
 

@@ -9,7 +9,7 @@ import {Action, Store} from "@ngrx/store";
 import {MarvelService} from "../providers/marvel-service";
 import {
   LOAD_COMICS, ComicsActions, LOAD_COMICS_OFFSET, SEARCH_COMICS, SEARCH_COMICS_BY_YEAR,
-  SEARCH_COMICS_CLEAR, SEARCH_COMICS_BY_YEAR_CLEAR
+  SEARCH_COMICS_CLEAR, SEARCH_COMICS_BY_YEAR_CLEAR, LOAD_COMIC_CHARACTERS
 } from "../actions/comics";
 import * as fromRoot from "../reducer/index";
 
@@ -105,6 +105,13 @@ export class ComicsEffects {
     .map(res => res.data.results)
     .map(comics => this._comicsActions.searchComicsSuccess(comics));
 
+  @Effect()
+  loadComicCharacters$: Observable<Action> = this._actions$
+    .ofType(LOAD_COMIC_CHARACTERS)
+    .switchMap(() => this._store.select(fromRoot.getComicSelectedId))
+    .switchMap(comicId => this._marvelService.getCharacters(comicId))
+    .map(res => res.data.results)
+    .map(characters => this._comicsActions.loadComicCharactersSuccess(characters));
 
 
 }
