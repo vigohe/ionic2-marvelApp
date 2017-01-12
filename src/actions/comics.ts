@@ -26,18 +26,14 @@ export class ComicsActions{
 
   loadComics() : Action{
     return {
-      type: LOAD_COMICS,
-      payload: 0
+      type: LOAD_COMICS
     };
   }
 
   loadComicsSuccess(comics : any) : Action {
     return {
       type: LOAD_COMICS_SUCCESS,
-      payload: {
-        entities: comics.entities,
-        offset: comics.offset
-      }
+      payload: comics
     };
   }
 

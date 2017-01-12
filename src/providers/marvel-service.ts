@@ -11,7 +11,7 @@ import {Observable} from "rxjs";
   for more info on providers and Angular 2 DI.
 */
 
-const API_KEY = "?apikey=9b87dae0e58fe8d0482c6d90a347c988&hash=59ac14f2bd20e50f967dc8765bfd5262&ts=1483976056";
+const API_KEY = "?apikey=9b87dae0e58fe8d0482c6d90a347c988&hash=59ac14f2bd20e50f967dc8765bfd5262&ts=1483976056&limit=5";
 const API_MARVEL = "https://gateway.marvel.com:443/v1/public";
 
 @Injectable()
