@@ -1,24 +1,30 @@
 <ion-header>
   <ion-navbar>
     <ion-title>Marvel Comics</ion-title>
-    <ion-list>
-
-      <ion-searchbar (ionInput)="inputSearch$.next($event)" placeholder="Search your favorite comic..."></ion-searchbar>
-
-      <ion-item>
-        <ion-icon name="calendar" item-left></ion-icon>
-        <ion-label>Search by Year...</ion-label>
-        <ion-datetime displayFormat="YYYY" [(ngModel)]="startYear"></ion-datetime>
-
-        <button ion-button icon-only item-right clear color="dark" (click)="clearYear$.next()" *ngIf="startYear">
-          <ion-icon name="close"></ion-icon>
-        </button>
-
-      </ion-item>
-    </ion-list>
-
   </ion-navbar>
+
+  <ion-list>
+
+    <ion-searchbar (ionInput)="inputSearch$.next($event)" placeholder="Search your favorite comic..."></ion-searchbar>
+
+    <ion-item>
+      <ion-icon name="calendar" item-left></ion-icon>
+      <ion-label>Search by start year...</ion-label>
+      <ion-datetime displayFormat="YYYY"
+                    [(ngModel)]="startYear"
+                    (ionChange)="ionDate$.next($event)">
+
+      </ion-datetime>
+
+      <button ion-button icon-only item-right clear color="dark" (click)="clearYear$.next()" *ngIf="startYear">
+        <ion-icon name="close"></ion-icon>
+      </button>
+    </ion-item>
+  </ion-list>
+
 </ion-header>
+
+
 
 <ion-content padding>
 

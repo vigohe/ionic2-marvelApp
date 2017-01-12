@@ -7,12 +7,15 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>comic</ion-title>
+    <ion-title>Comic Information</ion-title>
   </ion-navbar>
 
 </ion-header>
 
-
 <ion-content padding>
-  <comic-details [comic]="comic$ | async"></comic-details>
+  <comic-details [comic]="comic$ | async"
+                 [characters]="characters$ | async"
+                 [isDescriptionEmpty]="isDescriptionEmpty$ | async"
+                 [isCharacterEmpty]="isCharacterEmpty$ | async">
+  </comic-details>
 </ion-content>

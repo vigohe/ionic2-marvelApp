@@ -5,11 +5,18 @@
   for more info on Angular 2 Components.
 -->
 <ion-card>
-  <img src="{{comic.thumbnail.path}}.{{comic.thumbnail.extension}}"/>
-  <ion-card-content>
-    <ion-card-title>
-      {{comic.title}}
-    </ion-card-title>
-    <p>{{comic?.textObjects[0]?.text}}</p>
-  </ion-card-content>
+  <div style="position: relative">
+    <img src="{{comic.thumbnail.path}}.{{comic.thumbnail.extension}}">
+    <ion-fab right="" top="">
+      <button ion-fab color="light">
+        <ion-icon name="search"></ion-icon>
+      </button>
+    </ion-fab>
+    <ion-item>
+      <ion-icon name="book" item-left="" large=""></ion-icon>
+      <h2>{{comic.title}}</h2>
+      <p>issue number #{{comic.issueNumber}}</p>
+      <p>sale on {{saleDate}}</p>
+    </ion-item>
+  </div>
 </ion-card>

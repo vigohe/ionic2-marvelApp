@@ -13,6 +13,9 @@ import {Component, Input} from '@angular/core';
 export class ComicDetailsComponent {
 
   @Input() comic: any;
+  @Input() characters: any;
+  @Input() isDescriptionEmpty: boolean;
+  @Input() isCharacterEmpty: boolean;
 
   constructor() {
     console.log('Hello ComicDetails Component');

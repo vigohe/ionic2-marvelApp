@@ -131,9 +131,10 @@ export class ComicsActions{
     };
   }
 
-  loadComicCharactersFail() : Action {
+  loadComicCharactersFail(error) : Action {
     return {
-      type: LOAD_COMIC_CHARACTERS_FAIL
+      type: LOAD_COMIC_CHARACTERS_FAIL,
+      payload : error
     };
   }
 

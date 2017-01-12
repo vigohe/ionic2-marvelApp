@@ -36,3 +36,5 @@ export const getComicsNotFound = createSelector(getComicsState, fromComics.getNo
 export const getSelectedComic = createSelector(getComicsState, fromComics.getSelected);
 export const getComicCharacters = createSelector(getComicsState, fromComics.getCharacters);
 export const getComicSelectedId = createSelector(getComicsState, fromComics.getSelectedId);
+export const getComicsError = createSelector(getComicsState, fromComics.getError);
+export const getErrorCharacters = createSelector(getComicsState, fromComics.getErrorCharacters);

@@ -7,12 +7,45 @@
 
 <h1>{{comic?.title}}</h1>
 
-<ion-slides>
-  <ion-slide *ngFor="let image of comic?.images">
-    <img src="{{image.path}}.{{image.extension}}"/>
-  </ion-slide>
-</ion-slides>
+<ion-card>
+  <ion-slides>
+    <ion-slide *ngFor="let image of comic?.images">
+      <img src="{{image.path}}.{{image.extension}}"/>
+    </ion-slide>
+  </ion-slides>
+</ion-card>
 
-<ion-list>
-  <ion-item></ion-item>
-</ion-list>
+<ion-card>
+  <ion-card-header>
+    Description
+  </ion-card-header>
+  <ion-card-content *ngIf="!isDescriptionEmpty">
+    <p>
+      {{comic?.description}}
+    </p>
+  </ion-card-content>
+
+  <ion-item *ngIf="isDescriptionEmpty">
+    <span><ion-icon name="warning"></ion-icon> Empty</span>
+  </ion-item>
+
+</ion-card>
+
+<ion-card>
+  <ion-card-header>
+    Characters
+  </ion-card-header>
+  <ion-list *ngIf="!isCharacterEmpty">
+    <ion-item *ngFor="let character of characters">
+      <ion-avatar item-left="">
+        <img src="{{character.thumbnail.path}}.{{character.thumbnail.extension}}">
+      </ion-avatar>
+      <h2>{{character.name}}</h2>
+    </ion-item>
+  </ion-list>
+
+  <ion-item *ngIf="isCharacterEmpty">
+    <span><ion-icon name="warning"></ion-icon> Empty</span>
+  </ion-item>
+
+</ion-card>

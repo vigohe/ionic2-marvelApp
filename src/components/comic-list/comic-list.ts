@@ -32,7 +32,7 @@ export class ComicListComponent implements OnDestroy {
       .takeUntil(this.destroy$)
       .do(item => this._store.dispatch(this._comicsActions.selectedComic(item.id)))
       .do(item => this.navCtrl.push(ComicPage))
-      .subscribe(x => console.log(x), error => console.log("error",error), () => console.log("COMPLETE:::::::"));
+      .subscribe();
   }
 
   ngOnDestroy() {
