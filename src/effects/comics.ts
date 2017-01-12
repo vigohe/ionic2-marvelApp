@@ -23,11 +23,9 @@ export class ComicsEffects {
   loadComics$: Observable<Action> = this._actions$
     .ofType(LOAD_COMICS)
     .switchMap(() => this._marvelService.getComics({offset: 0}).catch(error => Observable.of(this._comicsActions.loadComicsFail(error))))
-    .map(res => {
-      return {offset: res.data.offset, entities: res.data.results};
-    })
+    .map(res => res.data.results)
     .map(comics => {
-      if (comics.entities.length > 0) {
+      if (comics.length > 0) {
         return this._comicsActions.loadComicsSuccess(comics);
       } else {
         return this._comicsActions.comicsNotFound();
